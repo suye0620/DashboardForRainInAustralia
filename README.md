@@ -18,7 +18,7 @@ the following:
 
 ```powershell
 python -m venv myvenv
- .\myvenv\bin\activate
+.\myvenv\Scripts\activate
 ```
 
 Install the requirements:
