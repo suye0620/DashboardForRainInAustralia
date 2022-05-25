@@ -1,0 +1,11 @@
+body {
+    font-family: Arial, "Microsoft YaHei", sans-serif;
+    background-color: #f0f2f5;
+}
+
+
+/* 使用的 */
+/* 整页容器 */
+.app__container {
+    margin: 0% 0%;
+}

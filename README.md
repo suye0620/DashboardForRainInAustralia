@@ -34,3 +34,4 @@ python app.py
 Open a browser at http://127.0.0.1:8050 (or other ports)
 
 ## Screenshots
+1. 使用`Link()`进行页面更新
