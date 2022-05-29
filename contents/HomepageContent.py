@@ -134,6 +134,26 @@ HomepageContent = [
 
         html.Div(
             html.Div([
+                fac.AntdParagraph(['　　该',html.A('数据集',
+                    target='_blank', # 新标签页
+                    href='https://www.kaggle.com/datasets/jsphyg/weather-dataset-rattle-package'),
+                    '来自澳大利亚许多地方的约10年时间跨度的每日天气观测。'],
+                    strong=True
+                    ),
+
+                html.Div(
+                    # fill the external 60% div
+                    fac.AntdImage(src='/assets/imgs/dataIntroduction.jpg',style = {'width':'100%'},preview=False),
+                    style={
+                        # control Image div size
+                        'height': '500px',
+                        # 'width': '100%',
+                        'display': 'flex',
+                        'justifyContent': 'center',
+                        'alignItems': 'center'
+                    }
+                ),
+
                 # target
                 fac.AntdParagraph(['　　',
                     # 图片也可以当图标用
@@ -141,9 +161,11 @@ HomepageContent = [
                     fac.AntdText('任务目标',)],
                     strong=True
                     ),
-                fac.AntdParagraph('　　通过对目标变量 RainTomorrow 训练分类模型来预测次日降雨',
+                fac.AntdParagraph('　　目标变量为 RainTomorrow ，训练分类模型来预测次日是否降雨',
                     strong=True
                     ),
+                
+
             ],
             style={
                 # 这里的宽度比例是与后面团队介绍板块的比例60%是一致的
