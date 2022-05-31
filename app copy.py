@@ -22,7 +22,7 @@ app = dash.Dash(
     __name__,
     # stylesheet
     external_stylesheets=[
-        './assets/css/style.css',
+        '/assets/css/style.css',
         ],
 
     # meta tags

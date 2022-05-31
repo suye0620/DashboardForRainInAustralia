@@ -1,6 +1,9 @@
+from click import style
 from dash import html  # html用于构建Dash应用中最基础的html元素
 import feffery_antd_components as fac  # 导入fac框架
 from dash import dcc
+import dash_bootstrap_components as dbc
+
 
 # Homepage content
 # the first bug: 不小心在列表后面加了逗号，导致回调函数以为传的参数是嵌套列表
@@ -36,7 +39,7 @@ HomepageContent = [
                         'alignItems': 'center'
                     }
                 )
-                for i, color in enumerate(['#0050b3', '#096dd9', '#1890ff', '#69c0ff', '#91d5ff'])
+                for i in range(5)
             ],
             autoplay=True,
             effect='fade'
@@ -91,12 +94,13 @@ HomepageContent = [
                 # related work
                 html.Div(
                     # fill the external 60% div
-                    fac.AntdImage(src='/assets/imgs/relatedWorks.png',style = {'width':'100%'},preview=False),
+                    fac.AntdImage(src='/assets/imgs/relatedWorks.png',style = {'width':'100%'},preview=True),
                     style={
                         # control Image div size
-                        'height': '500px',
+                        # below bug: 如果height设置为绝对值，会导致缩小时下方留出大量空白
+                        # 'height': '500px',
                         # 'width': '100%',
-                        'display': 'flex',
+                        # 'display': 'flex',
                         'justifyContent': 'center',
                         'alignItems': 'center'
                     }
@@ -141,14 +145,39 @@ HomepageContent = [
                     strong=True
                     ),
 
+                # example
+                fac.AntdParagraph(['　　',
+                    # 图片也可以当图标用
+                    fac.AntdImage(src='https://img.icons8.com/color/48/000000/activity-history.png',style={'width':'24px'},preview=False),
+                    fac.AntdText('样例',)],
+                    strong=True
+                    ),
                 html.Div(
                     # fill the external 60% div
-                    fac.AntdImage(src='/assets/imgs/dataIntroduction.jpg',style = {'width':'100%'},preview=False),
+                    fac.AntdImage(src='/assets/imgs/dataIntroduction.jpg',style = {'width':'100%'},preview=True),
                     style={
                         # control Image div size
-                        'height': '500px',
                         # 'width': '100%',
-                        'display': 'flex',
+                        # 'display': 'flex',
+                        'justifyContent': 'center',
+                        'alignItems': 'center'
+                    }
+                ),
+
+                # features description
+                fac.AntdParagraph(['　　',
+                    # 图片也可以当图标用
+                    fac.AntdImage(src='https://img.icons8.com/color/48/000000/document--v1.png',style={'width':'24px'},preview=False),
+                    fac.AntdText('变量说明',)],
+                    strong=True
+                    ),
+                html.Div(
+                    # fill the external 60% div
+                    fac.AntdImage(src='/assets/imgs/dataDescription.jpg',style = {'width':'100%'},preview=False),
+                    style={
+                        # control Image div size
+                        # 'width': '100%',
+                        # 'display': 'flex',
                         'justifyContent': 'center',
                         'alignItems': 'center'
                     }
