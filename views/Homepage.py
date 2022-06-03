@@ -1,8 +1,6 @@
 from click import style
 from dash import html  # html用于构建Dash应用中最基础的html元素
 import feffery_antd_components as fac  # 导入fac框架
-from dash import dcc
-import dash_bootstrap_components as dbc
 
 
 # Homepage content

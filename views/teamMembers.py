@@ -1,10 +1,10 @@
 from dash import html  # html用于构建Dash应用中最基础的html元素
 import feffery_antd_components as fac  # 导入fac框架
-from models.func import getMemberInfo
+from models.api import getMemberInfo
 
 # team members content
 # Although it is a part here, the root path need to keep pace with the app.py
-df_membersInfo = getMemberInfo("./data/membersInfo.csv")
+df_membersInfo = getMemberInfo()
 teamMembersContent=[
     # '关于我们'Divider
     fac.AntdDivider([
@@ -27,10 +27,11 @@ teamMembersContent=[
                 ),
                 # 描述
                 fac.AntdParagraph('　　{}'.format(df_membersInfo.iloc[i,1]),
-                    style={'font-weight': 'bold',
+                    style={
+                        # 'font-weight': 'bold',
                         # 固定文本宽度
                         'width':'70%',
-                        'font-size': '1.5 rem',
+                        # 'font-size': '1.5 rem',
                     }
                 )
             ],
@@ -42,6 +43,8 @@ teamMembersContent=[
                 'display': 'flex',
             },
             bodyStyle={
+                'font-weight': 'bold',
+                'font-size': '2 rem',
                 'display': 'flex',
                 'justifyContent': 'center',
                 'alignItems': 'center'
