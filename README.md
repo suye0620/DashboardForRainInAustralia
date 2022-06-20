@@ -13,7 +13,7 @@ Developer: Ye.S
 
 First, clone this repository and open a terminal, such as Powershell.
 
-Create and activate a new virtual environment (recommended) by running
+Create and activate a new virtual environment (recommended, and our Python version in this project: **3.7.12**) by running
 the following:
 
 ```powershell
@@ -32,6 +32,19 @@ Run the app:
 python app.py
 ```
 Open a browser at http://127.0.0.1:8050 (or other ports)
+
+If you add some new packages to the project, please remember use pip to generate the 'requirements.txt' again.
+```powershell
+pip freeze > requirements.txt
+```
+
+## Some tips on develop Dashboard
+1. The folder 'callbacks' is a supplement of 'views', we just withdraw some callbacks functions from 'views', to make the file appear simple and explict
+
+## TO DO
+1. 开发响应式的数据呈现表格，为后面使用这些数据进行图表绘制做准备
+2. 标签分布表格做起，绘制变量分布等图表，根据时间安排篇幅
+3. 完成第二部分模型介绍页面的开发
 
 ## Screenshots
 1. 使用`Link()`进行页面更新

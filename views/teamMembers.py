@@ -82,7 +82,6 @@ teamMembersContent=[
         'background-color': '#f0f2f5',
 
         # control div size
-        # 'height': '600px',
         'width': '100%',
         'display': 'flex',
         'justifyContent': 'center',
