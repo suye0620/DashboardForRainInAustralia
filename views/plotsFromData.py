@@ -11,11 +11,10 @@ from server import app
 
 df_weatherAUS = getWeatherAUS()
 
-# plots From Data
 plotsFromDataContent = [
     # divider
     fac.AntdDivider([
-        fac.AntdIcon(icon='fc-conference-call',style={'fontSize':'2.5rem'}),
+        fac.AntdIcon(icon='fc-data-sheet',style={'fontSize':'2.5rem'}),
         fac.AntdText('数据',strong=True,style={'fontSize':'2.5rem'})]
     ),
     
@@ -43,8 +42,68 @@ plotsFromDataContent = [
         text='奋力回调中···',
     ),
 
+    # divider
+    fac.AntdDivider([
+        fac.AntdIcon(icon='fc-bullish',style={'fontSize':'2.5rem'}),
+        fac.AntdText('看板',strong=True,style={'fontSize':'2.5rem'})]
+    ),
+
+    # plots from data
+    html.Div(
+        html.Div([
+            # Pre is a wrapper for the <pre> HTML5 element.
+            html.Pre('[]', id='select-demo-output'),
+            fac.AntdSelect(
+                id='select-city',
+                placeholder='共{}城市,请选择城市：'.format(
+                    len(df_weatherAUS.Location.unique())
+                ),
+                # 单选，返回一个值
+                mode=None,
+                options=[
+                    {'label': i, 'value': i} for i in df_weatherAUS.Location.unique()
+                ],
+                style={
+                    # 使用css样式固定宽度
+                    'width': '200px'
+                }
+            )
+        ],
+        style={
+            # col的列宽占页面宽度的大小
+            'width': '60%',
+        }
+        ),
+        # 外层Div样式
+        style={
+            # 背景颜色与之前保持一致
+            'background-color': '#f0f2f5',
+
+            # control div size
+            'width': '100%',
+            'display': 'flex',
+            'justifyContent': 'center',
+            'alignItems': 'start'
+        }
+    )
 ]
 
+# 回调函数：下拉菜单选择城市，然后显示日历
+@app.callback(
+    Output('select-demo-output', 'children'),
+    Input('select-city', 'value'),
+    prevent_initial_call=True
+)
+def button_callback_demo(value):
+
+    # value is a str
+    df_oneCity = df_weatherAUS[df_weatherAUS['Location'] == value]
+    startDate = df_oneCity.Date.min().strftime("%Y-%m-%d")
+    endDate = df_oneCity.Date.max().strftime("%Y-%m-%d")
+    
+    return '城市{0}的日期范围为{1}-{2}'.format(str(value),startDate,endDate)
+
+# 回调函数：数据表翻页的 
 @app.callback(
     # Output('weatherAUS-table', 'data'),
     [Output('weatherAUS-table', 'data'),
@@ -52,6 +111,7 @@ plotsFromDataContent = [
 
     # 被修饰的函数是Input和Output之间的连接 
     Input('weatherAUS-table', 'pagination'),
+    prevent_initial_call=True
     # suppress_callback_exceptions=True
 )
 
