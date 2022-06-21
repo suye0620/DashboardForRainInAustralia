@@ -12,6 +12,8 @@ app = dash.Dash(
         {"charset":"utf-8"},
         {"name": "viewport", "content": "width=device-width, initial-scale=1"},
     ],
+    # prevent_initial_callbacks=True,
+    # suppress_callback_exceptions=True
 )
 
 # Page title

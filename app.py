@@ -13,11 +13,11 @@ import feffery_antd_components as fac
 from dash.dependencies import Input, Output 
 
 # all contents of each view are as follows
-from views.Homepage import *
-from views.introductionOfModels import *
-from views.Page404 import *
-from views.plotsFromData import *
-from views.teamMembers import *
+from views.Homepage import HomepageContent
+from views.introductionOfModels import introductionOfModelsContent
+from views.Page404 import Page404
+from views.plotsFromData import plotsFromDataContent
+from views.teamMembers import teamMembersContent
 
 
 
@@ -189,7 +189,8 @@ app.layout = html.Div(
 # multi-pages(路由总控)
 @app.callback(
     Output('render-page-content', 'children'),
-    Input('url', 'pathname')
+    Input('url', 'pathname'),
+
 )
 def render_page_content(pathname):
     if pathname == '/':

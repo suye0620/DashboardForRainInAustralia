@@ -13,4 +13,4 @@ def getWeatherAUS() -> pd.DataFrame:
     desc: 获得天气数据
     return: DataFrame
     """
-    return pd.read_csv('models/data/weatherAUS.csv',encoding='utf-8')
+    return pd.read_csv('models/data/weatherAUS.csv',encoding='utf-8',parse_dates=['Date'])

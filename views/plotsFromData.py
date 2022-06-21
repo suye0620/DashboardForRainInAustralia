@@ -1,56 +1,73 @@
+import dash
 from dash import html  # html用于构建Dash应用中最基础的html元素
 import feffery_antd_components as fac  # 导入fac框架
-# import dash_bootstrap_components as dbc # 导入dbc，用于绘制表格
 # use dcc to generate graphs 
 from dash import dcc
+from dash.dependencies import Input, Output 
 import plotly.express as px
+from models.api import getWeatherAUS
+from server import app
 
-df = px.data.iris()
-df.insert(0, 'index', df.index)
-features = ["sepal_width", "sepal_length", "petal_width", "petal_length"]
 
-fig = px.scatter_matrix(
-    df,
-    dimensions=features,
-    color="species"
-)
-fig.update_traces(diagonal_visible=False)
+df_weatherAUS = getWeatherAUS()
 
 # plots From Data
 plotsFromDataContent = [
-    html.Div([
-        dcc.Graph(figure=fig),
-        html.Br(),
+    # divider
+    fac.AntdDivider([
+        fac.AntdIcon(icon='fc-conference-call',style={'fontSize':'2.5rem'}),
+        fac.AntdText('数据',strong=True,style={'fontSize':'2.5rem'})]
+    ),
+    
+    # data table
+    fac.AntdSpin(
         fac.AntdTable(
-            id='dash-table',
-            data=df.to_dict('records'),
+            id='weatherAUS-table',
+            # 服务端模式
+            mode='server-side',
+            data=df_weatherAUS.head(10).to_dict('records'),
             # 列表生成式
             columns=[
-                {'title': column, 'dataIndex': column} for column in df.columns
+                {'title': column, 'dataIndex': column,} for column in df_weatherAUS.columns
             ],
-            # size=15,  # 设置单页显示15行记录行数
-            # style_header={
-            #     'font-family': 'Times New Roman',
-            #     'font-weight': 'bold',
-            #     'text-align': 'center'
-            # },
-            # style_data={
-            #     'font-family': 'Times New Roman',
-            #     'text-align': 'center'
-            # }
-        )
+            # 是否在表格周围添加网格线
+            bordered=True,
+            pagination={
+            'current': 1,
+            'total': df_weatherAUS.shape[0],
+            'pageSize': 10,
+            'pageSizeOptions': [10,5]
+            },
+            maxWidth=400,
+        ),
+        text='奋力回调中···',
+    ),
 
-        # dcc.Graph(
-        #     figure = fig,
-        #     id = 'y_label_chart'
-        # ),
-    ],
-    style={
-        # control div size
-        'width': '100%',
-        'display': 'flex',
-        'justifyContent': 'center',
-        'alignItems': 'center'
-    }
-    )
 ]
+
+@app.callback(
+    # Output('weatherAUS-table', 'data'),
+    [Output('weatherAUS-table', 'data'),
+     Output('weatherAUS-table', 'pagination')],
+
+    # 被修饰的函数是Input和Output之间的连接 
+    Input('weatherAUS-table', 'pagination'),
+    # suppress_callback_exceptions=True
+)
+
+def table_server_side_callback(pagination):
+
+    # 构造临时副本数据框，防止有操作对原始数据框做更改；而且页面其他的地方还会用到原始数据框
+    batch_df = df_weatherAUS.copy()
+
+    # 在前面的条件组合基础上，输出对应页的数据帧
+    # pageSize是pagination的key
+    start_index = (pagination['current'] - 1) * pagination['pageSize']
+    end_index = pagination['current'] * pagination['pageSize']
+
+    # 更新data与pagination参数
+    return (
+        batch_df.iloc[start_index:end_index, :].to_dict('records'),
+        dash.no_update
+    )
+    
