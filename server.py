@@ -1,10 +1,12 @@
 import dash
+import dash_bootstrap_components as dbc
 
 app = dash.Dash(
     __name__,
     # stylesheet
     external_stylesheets=[
         '/assets/css/style.css',
+        dbc.themes.SUPERHERO,
         ],
 
     # meta tags

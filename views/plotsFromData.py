@@ -1,8 +1,10 @@
+from cProfile import label
 import dash
 from dash import html  # html用于构建Dash应用中最基础的html元素
 import feffery_antd_components as fac  # 导入fac框架
 # use dcc to generate graphs 
 from dash import dcc
+import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output 
 from models.api import getWeatherAUS,getCityAUS
 from server import app
@@ -136,160 +138,54 @@ plotsFromDataContent = [
             # 用于占位，一旦选择了日期就有
             html.Div(id='oneDayWeather-div'),
 
-            # 单日天气数据
-            # 下雨还是不下雨
-            fac.AntdRow(
-                [
-                    fac.AntdCol(
-                        html.Div(
-                            fac.AntdText('今日天气', strong=True),
-                            style={
-                                # 'backgroundColor': 'rgba(64, 173, 255, 1)',
-                                'color': 'black',
-                                'height': '100px',
-                                'display': 'flex',
-                                'justifyContent': 'center',
-                                'alignItems': 'center'
-                            }
-                        ),
-                        span=8
-                    ),
-                    fac.AntdCol(
-                        html.Div(
-                            fac.AntdImage(src="https://img.icons8.com/color/96/000000/rainy-weather.png",preview=False),
-                            style={
-                                # 'backgroundColor': 'rgba(64, 173, 255, 1)',
-                                'color': 'white',
-                                'height': '100px',
-                                'display': 'flex',
-                                'justifyContent': 'center',
-                                'alignItems': 'center'
-                            }
-                        ),
-                        span=16
-                    ),
-                ],
-                gutter=10
+            # title: '整体数据侧写'
+            fac.AntdTitle(
+                '🌎整体情况',
+                # id='dateRange-title',
+                level=3,
+                style={
+                    'color': 'black',
+                    # 'fontSize': '4.5 rem',
+                }
             ),
-            
-            # 温度计
-            fac.AntdRow(
-                [
-                    fac.AntdCol(
-                        html.Div(
-                            fac.AntdText('最低温', strong=True),
-                            style={
-                                'backgroundColor': 'rgba(64, 173, 255, 1)',
-                                'color': 'white',
-                                'height': '200px',
-                                'display': 'flex',
-                                'justifyContent': 'center',
-                                'alignItems': 'center'
-                            }
-                        ),
-                        span=3
-                    ),
-                    fac.AntdCol(
-                        html.Div(
-                            daq.Thermometer(
-                                value=5,
-                                min=0,
-                                max=40,
-                                height=100,
-                                width = 10,
-                                color = 'red',
-                                style={
-                                    'margin-bottom': '5%'
-                                }
-                            ),
-                            style={
-                                'backgroundColor': 'rgba(0, 146, 255, 1)',
-                                'color': 'white',
-                                'height': '200px',
-                                'display': 'flex',
-                                'justifyContent': 'center',
-                                'alignItems': 'center'
-                            }
-                        ),
-                        span=5
-                    ),
-                    fac.AntdCol(
-                        html.Div(
-                            fac.AntdText('最高温', strong=True),
-                            style={
-                                'backgroundColor': 'rgba(64, 173, 255, 1)',
-                                'color': 'white',
-                                'height': '200px',
-                                'display': 'flex',
-                                'justifyContent': 'center',
-                                'alignItems': 'center'
-                            }
-                        ),
-                        span=3
-                    ),
-                    fac.AntdCol(
-                        html.Div(
-                            daq.Thermometer(
-                                value=5,
-                                min=0,
-                                max=40,
-                                height=100,
-                                width = 10,
-                                color = 'red',
-                                style={
-                                    'margin-bottom': '5%'
-                                }
-                            ),
-                            style={
-                                'backgroundColor': 'rgba(0, 146, 255, 1)',
-                                'color': 'white',
-                                'height': '200px',
-                                'display': 'flex',
-                                'justifyContent': 'center',
-                                'alignItems': 'center'
-                            }
-                        ),
-                        span=5
-                    ),
-                    fac.AntdCol(
-                        html.Div(
-                            fac.AntdText('降雨量', strong=True),
-                            style={
-                                'backgroundColor': 'rgba(64, 173, 255, 1)',
-                                'color': 'white',
-                                'height': '200px',
-                                'display': 'flex',
-                                'justifyContent': 'center',
-                                'alignItems': 'center'
-                            }
-                        ),
-                        span=3
-                    ),
-                    fac.AntdCol(
-                        html.Div(
-                            daq.Thermometer(
-                                min=95,
-                                max=105,
-                                height=100,
-                                width = 10,
-                                value=98.6,
-                                className='dark-theme-control'
-                            ),
-                            style={
-                                'backgroundColor': 'rgba(0, 146, 255, 1)',
-                                'color': 'white',
-                                'height': '200px',
-                                'display': 'flex',
-                                'justifyContent': 'center',
-                                'alignItems': 'center'
-                            }
-                        ),
-                        span=5
-                    ),
-                ],
-                gutter=10
-            )
 
+            fac.AntdTitle(
+                '变量分布',
+                # id='dateRange-title',
+                level=4,
+                style={
+                    'color': 'black',
+                    # 'fontSize': '4.5 rem',
+                }
+            ),
+
+            html.Div(
+                # fill the external 60% div
+                fac.AntdImage(src='/assets/imgs/distribution.png',style = {'width':'100%'},preview=False),
+                style={
+                    'justifyContent': 'center',
+                    'alignItems': 'center'
+                }
+            ),
+
+            fac.AntdTitle(
+                '变量相关性',
+                # id='dateRange-title',
+                level=4,
+                style={
+                    'color': 'black',
+                    # 'fontSize': '4.5 rem',
+                }
+            ),
+
+            html.Div(
+                # fill the external 60% div
+                fac.AntdImage(src='/assets/imgs/corrPlot.png',style = {'width':'100%'},preview=False),
+                style={
+                    'justifyContent': 'center',
+                    'alignItems': 'center'
+                }
+            ),
         ],
         style={
             # col的列宽占页面宽度的大小
@@ -307,7 +203,14 @@ plotsFromDataContent = [
             'justifyContent': 'center',
             'alignItems': 'start'
         }
-    )
+    ),
+
+    # divider
+    fac.AntdDivider([
+        fac.AntdIcon(icon='fc-questions',style={'fontSize':'2.5rem'}),
+        fac.AntdText('预测',strong=True,style={'fontSize':'2.5rem'})]
+    ),
+
 ]
 
 
@@ -321,17 +224,411 @@ plotsFromDataContent = [
 )
 def select_date(datevalue,cityvalue):
     # cityvalue经过第一步选择肯定非空，不需要检查
-    # 检查日期是否非空
+    # 检查日期是否非空,空的话no_update
     if datevalue:
-        # 如果没找到
+        # 如果没找到选中日期
         if not dateMemory1.strWhetherInDateRange(datevalue):
             return fac.AntdMessage(
                 content='您选择的日期没有对应的天气数据！',
                 type='error',
             )
+        
+        # 有选中日期,回调
         else:
+            # search
             df_oneday = df_weatherAUS[(df_weatherAUS['Location'] == cityvalue) & (df_weatherAUS['Date'] == datevalue)]
-            return str(df_oneday.iloc[:,1])
+            # deal with NA
+            df_oneday = df_oneday.iloc[0,:].map(lambda x: NA2str(x))
+            
+            if df_oneday.RainToday == 'No':
+                imgSrc = 'https://img.icons8.com/color/96/000000/smiling-sun.png'
+            else:
+                imgSrc = 'https://img.icons8.com/color/96/000000/rainy-weather.png'
+
+            # generate components
+            list_components=[
+                # 单日天气数据
+                # 下雨还是不下雨
+                fac.AntdRow(
+                    [
+                        fac.AntdCol(
+                            html.Div(
+                                fac.AntdText('当日天气', strong=True),
+                                style={
+                                    # 'backgroundColor': 'rgba(64, 173, 255, 1)',
+                                    'color': 'black',
+                                    'height': '100px',
+                                    'display': 'flex',
+                                    'justifyContent': 'center',
+                                    'alignItems': 'center'
+                                }
+                            ),
+                            span=8
+                        ),
+                        fac.AntdCol(
+                            html.Div(
+                                fac.AntdImage(src=imgSrc,preview=False),
+                                style={
+                                    # 'backgroundColor': 'rgba(64, 173, 255, 1)',
+                                    'color': 'white',
+                                    'height': '100px',
+                                    'display': 'flex',
+                                    'justifyContent': 'center',
+                                    'alignItems': 'center'
+                                }
+                            ),
+                            span=16
+                        ),
+                    ],
+                    gutter=10
+                ),
+
+                # 温度计
+                fac.AntdRow(
+                    [
+                        fac.AntdCol(
+                            html.Div(
+                                fac.AntdText('最低温(°C)', strong=True),
+                                style={
+                                    'height': '150px',
+                                    'display': 'flex',
+                                    'justifyContent': 'center',
+                                    'alignItems': 'center'
+                                }
+                            ),
+                            span=3
+                        ),
+                        fac.AntdCol(
+                            html.Div(
+                                daq.Thermometer(
+                                    value=df_oneday.MinTemp,
+                                    min=0,
+                                    max=45,
+                                    height=100,
+                                    width = 10,
+                                    color = 'red',
+                                    style={
+                                        'margin-bottom': '5%'
+                                    }
+                                ),
+                                style={
+                                    'height': '150px',
+                                    'display': 'flex',
+                                    'justifyContent': 'center',
+                                    'alignItems': 'center'
+                                }
+                            ),
+                            span=5
+                        ),
+                        fac.AntdCol(
+                            html.Div(
+                                fac.AntdText('最高温(°C)', strong=True),
+                                style={
+                                    'height': '150px',
+                                    'display': 'flex',
+                                    'justifyContent': 'center',
+                                    'alignItems': 'center'
+                                }
+                            ),
+                            span=3
+                        ),
+                        fac.AntdCol(
+                            html.Div(
+                                daq.Thermometer(
+                                    value=df_oneday.MaxTemp,
+                                    min=0,
+                                    max=45,
+                                    height=100,
+                                    width = 10,
+                                    color = 'red',
+                                    style={
+                                        'margin-bottom': '5%'
+                                    }
+                                ),
+                                style={
+                                    # 外层无法控制内层颜色
+                                    # 'color': 'white',
+                                    'height': '150px',
+                                    'display': 'flex',
+                                    'justifyContent': 'center',
+                                    'alignItems': 'center'
+                                }
+                            ),
+                            span=5
+                        ),
+                        fac.AntdCol(
+                            html.Div(
+                                fac.AntdText('降雨量(mm)', strong=True),
+                                style={
+                                    'height': '150px',
+                                    'display': 'flex',
+                                    'justifyContent': 'center',
+                                    'alignItems': 'center'
+                                }
+                            ),
+                            span=3
+                        ),
+                        fac.AntdCol(
+                            html.Div(
+                                daq.Thermometer(
+                                    min=0,
+                                    max=30,
+                                    height=100,
+                                    width = 10,
+                                    value=df_oneday.Rainfall,
+                                    className='dark-theme-control'
+                                ),
+                                style={
+                                    'height': '150px',
+                                    'display': 'flex',
+                                    'justifyContent': 'center',
+                                    'alignItems': 'center'
+                                }
+                            ),
+                            span=5
+                        ),
+                    ],
+                    gutter=5
+                ),
+
+                # 风向加风速
+                fac.AntdRow(
+                    [
+                        fac.AntdCol(
+                            html.Div(
+                                fac.AntdText('上午九点风向(罗经点)', strong=True),
+                                style={
+                                    'height': '150px',
+                                    'display': 'flex',
+                                    'justifyContent': 'center',
+                                    'alignItems': 'center'
+                                }
+                            ),
+                            span=2
+                        ),
+                        fac.AntdCol(
+                            html.Div(
+                                fac.AntdText(df_oneday.WindDir9am, strong=True),
+                                style={
+                                    'height': '150px',
+                                    'display': 'flex',
+                                    'justifyContent': 'center',
+                                    'alignItems': 'center'
+                                }
+                            ),
+                            span=3
+                        ),
+                        fac.AntdCol(
+                            html.Div(
+                                fac.AntdText('上午九点风速(km/h)', strong=True),
+                                style={
+                                    'height': '150px',
+                                    'display': 'flex',
+                                    'justifyContent': 'center',
+                                    'alignItems': 'center'
+                                }
+                            ),
+                            span=2
+                        ),
+                        fac.AntdCol(
+                            html.Div(
+                                daq.Gauge(
+                                    min=0,
+                                    max=77,
+                                    value=df_oneday.WindSpeed9am,
+                                    size = 120,
+                                    units='km/h',
+                                    showCurrentValue=False,
+                                    color="#4c9be8",
+                                    style={
+                                        "align": "center",
+                                        "display": "flex",
+                                        "marginTop": "-30%",
+                                        "marginBottom": "-40%",
+                                    },
+                                ),
+                                style={
+                                    'height': '150px',
+                                    'display': 'flex',
+                                    'justifyContent': 'center',
+                                    'alignItems': 'center'
+                                }
+                            ),
+                            span=5
+                        ),
+
+                        fac.AntdCol(
+                            html.Div(
+                                fac.AntdText('下午三时风向(罗经点)', strong=True),
+                                style={
+                                    'height': '150px',
+                                    'display': 'flex',
+                                    'justifyContent': 'center',
+                                    'alignItems': 'center'
+                                }
+                            ),
+                            span=2
+                        ),
+                        fac.AntdCol(
+                            html.Div(
+                                fac.AntdText(df_oneday.WindDir3pm, strong=True),
+                                style={
+                                    'height': '150px',
+                                    'display': 'flex',
+                                    'justifyContent': 'center',
+                                    'alignItems': 'center'
+                                }
+                            ),
+                            span=3
+                        ),
+                        fac.AntdCol(
+                            html.Div(
+                                fac.AntdText('下午三时风速(km/h)', strong=True),
+                                style={
+                                    'height': '150px',
+                                    'display': 'flex',
+                                    'justifyContent': 'center',
+                                    'alignItems': 'center'
+                                }
+                            ),
+                            span=2
+                        ),
+                        fac.AntdCol(
+                            html.Div(
+                                daq.Gauge(
+                                    min=0,
+                                    max=77,
+                                    value=df_oneday.WindSpeed3pm,
+                                    size = 120,
+                                    units='km/h',
+                                    showCurrentValue=False,
+                                    color="#4c9be8",
+                                    style={
+                                        "align": "center",
+                                        "display": "flex",
+                                        "marginTop": "-30%",
+                                        "marginBottom": "-40%",
+                                    },
+                                ),
+                                style={
+                                    'height': '150px',
+                                    'display': 'flex',
+                                    'justifyContent': 'center',
+                                    'alignItems': 'center'
+                                }
+                            ),
+                            span=5
+                        ),
+
+                    ],
+                    gutter=5
+                ),
+
+                # 湿度+气压
+                fac.AntdRow(
+                    [
+                        fac.AntdCol(
+                            html.Div(
+                                fac.AntdText('上午九时湿度(%)', strong=True),
+                                style={
+                                    'height': '100px',
+                                    'display': 'flex',
+                                    'justifyContent': 'center',
+                                    'alignItems': 'center'
+                                }
+                            ),
+                            span=2
+                        ),
+                        fac.AntdCol(
+                            html.Div(
+                                fac.AntdText('{}'.format(str(df_oneday.Humidity9am)), strong=True),
+                                style={
+                                    'height': '100px',
+                                    'display': 'flex',
+                                    'justifyContent': 'center',
+                                    'alignItems': 'center'
+                                }
+                            ),
+                            span=4
+                        ),
+                        fac.AntdCol(
+                            html.Div(
+                                fac.AntdText('下午三时湿度(%)', strong=True),
+                                style={
+                                    'height': '100px',
+                                    'display': 'flex',
+                                    'justifyContent': 'center',
+                                    'alignItems': 'center'
+                                }
+                            ),
+                            span=2
+                        ),
+                        fac.AntdCol(
+                            html.Div(
+                                fac.AntdText('{}'.format(str(df_oneday.Humidity3pm)), strong=True),
+                                style={
+                                    'height': '100px',
+                                    'display': 'flex',
+                                    'justifyContent': 'center',
+                                    'alignItems': 'center'
+                                }
+                            ),
+                            span=4
+                        ),
+                        fac.AntdCol(
+                            html.Div(
+                                fac.AntdText('上午九时气压(百帕)', strong=True),
+                                style={
+                                    'height': '100px',
+                                    'display': 'flex',
+                                    'justifyContent': 'center',
+                                    'alignItems': 'center'
+                                }
+                            ),
+                            span=2
+                        ),
+                        fac.AntdCol(
+                            html.Div(
+                                fac.AntdText('{}'.format(str(df_oneday.Pressure9am)), strong=True),
+                                style={
+                                    'height': '100px',
+                                    'display': 'flex',
+                                    'justifyContent': 'center',
+                                    'alignItems': 'center'
+                                }
+                            ),
+                            span=4
+                        ),
+                        fac.AntdCol(
+                            html.Div(
+                                fac.AntdText('下午三时气压(百帕)', strong=True),
+                                style={
+                                    'height': '100px',
+                                    'display': 'flex',
+                                    'justifyContent': 'center',
+                                    'alignItems': 'center'
+                                }
+                            ),
+                            span=2
+                        ),
+                        fac.AntdCol(
+                            html.Div(
+                                fac.AntdText('{}'.format(str(df_oneday.Pressure3pm)), strong=True),
+                                style={
+                                    'height': '100px',
+                                    'display': 'flex',
+                                    'justifyContent': 'center',
+                                    'alignItems': 'center'
+                                }
+                            ),
+                            span=4
+                        ),
+                    ],
+                    gutter=5
+                ), #行结束括号
+
+            ]
+            return list_components
 
     return dash.no_update
 
