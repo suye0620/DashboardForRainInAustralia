@@ -312,15 +312,17 @@ def select_date(datevalue,cityvalue):
     # cityvalue经过第一步选择肯定非空，不需要检查
     # 检查日期是否非空,空的话no_update
     if datevalue:
+        # seq_search用于存放查询结果
+        seq_search = (df_weatherAUS['Location'] == cityvalue) & (df_weatherAUS['Date'] == datevalue)
         # 如果没找到选中日期
-        if not dateMemory1.strWhetherInDateRange(datevalue):
+        if sum(seq_search) == 0:
             return fac.AntdMessage(
                 content='您选择的日期没有对应的天气数据！',
                 type='error',
             )
         
         # 有选中日期,回调
-        else:
+        elif sum(seq_search) == 1:
             # search
             df_oneday = df_weatherAUS[(df_weatherAUS['Location'] == cityvalue) & (df_weatherAUS['Date'] == datevalue)]
             # deal with NA

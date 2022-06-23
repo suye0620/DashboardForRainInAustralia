@@ -1,7 +1,7 @@
 import dash
 from dash import dcc
 # import app
-from server import app
+from server import app,server
 
 # html用于构建Dash应用中最基础的html元素
 from dash import html
