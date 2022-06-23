@@ -1,12 +1,11 @@
-from cProfile import label
 import dash
 from dash import html  # html用于构建Dash应用中最基础的html元素
 import feffery_antd_components as fac  # 导入fac框架
 # use dcc to generate graphs 
 from dash import dcc
 import dash_bootstrap_components as dbc
-from dash.dependencies import Input, Output 
-from models.api import getWeatherAUS,getCityAUS
+from dash.dependencies import Input, Output ,State
+from models.api import getWeatherAUS,getCityAUS,getDemoData
 from server import app
 # json用来调试回调函数的多输入值
 # import json
@@ -14,9 +13,11 @@ from tools import *
 import dash_daq as daq
 import plotly.express as px
 import plotly.graph_objects as go
+import pickle,catboost
 
 df_CityAUS = getCityAUS()
 df_weatherAUS = getWeatherAUS()
+demo_data = getDemoData()
 
 # make plots
 fig_CityAUS = go.Figure(data=go.Scattergeo(
@@ -211,9 +212,94 @@ plotsFromDataContent = [
         fac.AntdText('预测',strong=True,style={'fontSize':'2.5rem'})]
     ),
 
+    html.Div(
+        html.Div([
+            # 标题提示
+            fac.AntdTitle(
+                '🔢请输入你要预测的某日观测:',
+                # id='dateRange-title',
+                level=4,
+                style={
+                    'color': 'black',
+                    # 'fontSize': '4.5 rem',
+                }
+            ),
+            html.Br(),
+            fac.AntdParagraph('格式要求', strong=True),
+            fac.AntdParagraph('逗号分隔,依次输入:Location,MinTemp,MaxTemp,Rainfall,'+
+            'WindGustDir,WindGustSpeed,WindDir9am,WindDir3pm,WindSpeed9am,WindSpeed3pm,'+
+            'Humidity9am,Humidity3pm,Pressure9am,Pressure3pm,Temp9am,Temp3pm', strong=True),
+            fac.AntdParagraph('一些例子,预测时注意不要复制最后一项', strong=True),
+            fac.AntdParagraph('倒数两个下雨样本预测对了,嘿嘿(●ˇ∀ˇ●)', strong=True),
+            html.Plaintext(demo_data,style={
+                'font-size': '1.5rem',
+                'font-weight': 'bold',
+                # 'font-family': 'sans-serif',
+            }),
+
+
+
+            # 预测区
+            html.Span([
+                # 输入框
+                fac.AntdInput(
+                    id = 'oneday-observation-input',
+                    mode='default',
+                    placeholder='请输入你要预测的观测',
+                    style={
+                            'width': '600px',
+                            'marginBottom': '5px'
+                        }
+                ),
+                fac.AntdButton(
+                    children = '开始预测',
+                    type='primary',
+                    id='prediction-button',
+                    nClicks=0,
+                ),
+
+                fac.AntdText(id='prediction-result'),
+            ]),
+        ],
+        style={
+            # col的列宽占页面宽度的大小
+            'width': '70%',
+        }
+        ),
+        # 外层Div样式
+        style={
+            # 背景颜色与之前保持一致
+            'background-color': '#f0f2f5',
+
+            # control div size
+            'width': '100%',
+            'display': 'flex',
+            'justifyContent': 'center',
+            'alignItems': 'start'
+        }
+    )
 ]
 
 
+# 回调函数：点击预测
+@app.callback(
+    Output('prediction-result', 'children'),
+    Input('prediction-button', 'nClicks'),
+    State('oneday-observation-input', 'value'),
+    prevent_initial_call=True
+)
+def input_value_callback_demo(nClicks,value):
+    if nClicks:
+        model_catboost = pickle.load(open("assets/catboost_model.pickle", "rb"))
+        list_inputData = value.strip(',').split(',')
+        df_inputData = pd.DataFrame(list_inputData).T.values
+        prediction = model_catboost.predict(df_inputData)
+        if str(prediction) == '[1]':
+            return '第二天天气: 下雨🌧'
+        elif str(prediction) == '[0]':
+            return '第二天天气: 晴朗☀'
+
+# 回调函数：查询某日天气C
 @app.callback(
     Output('oneDayWeather-div','children'),
     [
@@ -303,7 +389,7 @@ def select_date(datevalue,cityvalue):
                                 daq.Thermometer(
                                     value=df_oneday.MinTemp,
                                     min=0,
-                                    max=45,
+                                    max=50,
                                     height=100,
                                     width = 10,
                                     color = 'red',
@@ -337,7 +423,7 @@ def select_date(datevalue,cityvalue):
                                 daq.Thermometer(
                                     value=df_oneday.MaxTemp,
                                     min=0,
-                                    max=45,
+                                    max=50,
                                     height=100,
                                     width = 10,
                                     color = 'red',
