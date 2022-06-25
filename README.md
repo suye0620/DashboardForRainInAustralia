@@ -16,9 +16,13 @@ Developer: Ye.S
 
 **views:** define the layout of all pages
 
+**source_code_of_ML_models:** source code we used in model training
+
 app.py: index page and startup file
 
 server.py: define some details of the Dash app
+
+paper.pdf: brief introduction of our project
 
 tools.py: some small tools to process data
 
