@@ -1,5 +1,7 @@
 # DashboardForRainInAustralia
 
+☞[click me to visit it](http://150.158.97.38:5000/)
+
 ## About this app
 
 This project is for the class presentation(Big Data Cases Analysis,ZUEL,2022-Spring).
