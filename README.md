@@ -6,6 +6,24 @@ This project is for the class presentation(Big Data Cases Analysis,ZUEL,2022-Spr
 
 Developer: Ye.S
 
+**project structure:**
+
+**assets:** store some static files such as images, css style sheets and the ML model
+
+**callbacks:** define some callback functions
+
+**models:** data and some useful api
+
+**views:** define the layout of all pages
+
+app.py: index page and startup file
+
+server.py: define some details of the Dash app
+
+tools.py: some small tools to process data
+
+requirements.txt: list the packages and their versions we used in this project
+
 ## How to run this app
 
 (The following instructions apply to Posix/bash. Windows users should check
